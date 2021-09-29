@@ -48,13 +48,27 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// fonction avant création en BDD
+// fonction avant création en BDD pour crypter le mdp
 
 userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
+
+// vérification via bcrypt du password en body et de celui en db
+
+userSchema.statics.login = async function (email, password) {
+  const user = await this.findOne({ email });
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      return user;
+    }
+    throw Error("incorrect password");
+  }
+  throw Error("incorrect email");
+};
 
 const userModel = mongoose.model("users", userSchema);
 

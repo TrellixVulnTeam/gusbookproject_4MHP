@@ -4,6 +4,8 @@ const userController = require("../controllers/user.controller");
 
 // authentification
 router.post("/register", authController.signup);
+router.post("/login", authController.login);
+router.get("/logout", authController.logout);
 
 // user
 
@@ -16,6 +18,7 @@ router.put("/:id", userController.updateUser);
 router.delete("/:id", userController.deleteUser);
 
 router.patch("/follow/:id", userController.follow);
+
 router.patch("/unfollow/:id", userController.unfollow);
 
 module.exports = router;
