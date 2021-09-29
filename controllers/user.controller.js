@@ -157,7 +157,7 @@ module.exports.unfollow = async (req, res) => {
     //return res.status(500).json({ message: err });
   }
 
-  //suppression de "fllowings " list de la personne suivie
+  //suppression de "followings " list de la personne suivie
 
   try {
     await userModel.findByIdAndUpdate(

@@ -8,7 +8,6 @@ router.post("/login", authController.login);
 router.get("/logout", authController.logout);
 
 // user
-
 router.get("/", userController.getAllUsers);
 
 router.get("/:id", userController.userInfo);
