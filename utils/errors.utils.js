@@ -1,0 +1,33 @@
+const signUpErrors = (err) => {
+  let errors = { pseudo: "", email: "", password: "" };
+
+  if (err.message.includes("pseudo"))
+    errors.pseudo = "Pseudo incorrect ou déjà pris";
+
+  if (err.message.includes("email"))
+    errors.email = "Email incorrect ou déjà pris";
+
+  if (err.message.includes("password"))
+    errors.password = "Le mot de passe doit faire si caractère minimum";
+
+  if (err.code === 11000 && Object.keys(err.keyValue)[0].includes("pseudo"))
+    errors.pseudo = "Cet pseudo existe déjà";
+
+  if (err.code === 11000 && Object.keys(err.keyValue)[0].includes("email"))
+    errors.email = "Cet email existe déjà";
+
+  return errors;
+};
+
+const signInErrors = (err) => {
+  let errors = { email: "", password: "" };
+
+  if (err.message.includes("email")) errors.email = "Email inconnu";
+
+  if (err.message.includes("password"))
+    errors.password = "Le mot de passe ne correspond pas";
+
+  return errors;
+};
+
+module.exports = { signUpErrors, signInErrors };
