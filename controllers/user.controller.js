@@ -10,7 +10,7 @@ module.exports.getAllUsers = async (req, res) => {
 
 // récupérer un utilisateur par son ID
 
-module.exports.userInfo = (req, res) => {
+module.exports.userInfo = async (req, res) => {
   // méthode de mongoose.objectID qui permet de vérifier en DB si l'ID existe
   if (!ObjectId.isValid(req.params.id))
     return res.status(400).send("ID user inconnue : " + req.params.id);
@@ -23,13 +23,14 @@ module.exports.userInfo = (req, res) => {
       .select("-password");
 };
 
+// edit de la description du user
 module.exports.updateUser = async (req, res) => {
-  console.log("update controller");
+  //console.log("update controller");
   if (!ObjectId.isValid(req.params.id))
     return res.status(400).send("ID user inconnue : " + req.params.id);
 
   try {
-    console.log("update controller try");
+    //console.log("update controller try");
     await userModel.findByIdAndUpdate(
       {
         _id: req.params.id,
@@ -56,5 +57,125 @@ module.exports.updateUser = async (req, res) => {
   } catch (err) {
     console.log("update controller erro" + err);
     //return res.status(500).json({ message: err }); errorMongooseError : Query was already executed
+  }
+};
+
+// delete user
+
+module.exports.deleteUser = async (req, res) => {
+  // méthode de mongoose.objectID qui permet de vérifier en DB si l'ID existe
+  if (!ObjectId.isValid(req.params.id))
+    return res.status(400).send("ID user inconnue : " + req.params.id);
+
+  try {
+    await userModel.remove({ _id: req.params.id }).exec();
+    res.status(200).json({ message: "User bien supprimé" });
+  } catch (err) {
+    return res.status(500).json({ message: err });
+  }
+};
+
+// ajout d'un user follow
+module.exports.follow = async (req, res) => {
+  if (
+    !ObjectId.isValid(req.params.id) ||
+    !ObjectId.isValid(req.body.idToFollow)
+  )
+    return res.status(400).send("ID user inconnue : " + req.params.id);
+
+  // ajout à "followers" list dans la collection du user
+
+  try {
+    await userModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $addToSet: { followings: req.body.idToFollow },
+      },
+      {
+        new: true,
+        upsert: true,
+      },
+      (err, docs) => {
+        if (!err) {
+          res.status(201).json(docs);
+        } else return res.status(400).json(err);
+      }
+    );
+  } catch (err) {
+    //return res.status(500).json({ message: err });
+  }
+
+  // ajout à "followers" list dans la collection du user
+  try {
+    await userModel.findByIdAndUpdate(
+      req.body.idToFollow,
+      {
+        $addToSet: { followers: req.params.id },
+      },
+      {
+        new: true,
+        upsert: true,
+      },
+      (err, docs) => {
+        if (!err) {
+          // res.status(201).json(docs);
+          console.log("query two OK");
+        } else return res.status(400).json(err);
+      }
+    );
+  } catch (err) {
+    //return res.status(500).json({ message: err });
+  }
+};
+
+// enlever un user follow
+module.exports.unfollow = async (req, res) => {
+  if (
+    !ObjectId.isValid(req.params.id) ||
+    !ObjectId.isValid(req.body.idToUnfollow)
+  )
+    return res.status(400).send("ID user inconnue : " + req.params.id);
+
+  //suppression de "followers " list du user
+  try {
+    await userModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: { followings: req.body.idToUnfollow },
+      },
+      {
+        new: true,
+        upsert: true,
+      },
+      (err, docs) => {
+        if (!err) {
+          res.status(201).json(docs);
+        } else return res.status(400).json(err);
+      }
+    );
+  } catch (err) {
+    //return res.status(500).json({ message: err });
+  }
+
+  //suppression de "fllowings " list de la personne suivie
+
+  try {
+    await userModel.findByIdAndUpdate(
+      req.body.idToUnfollow,
+      {
+        $pull: { followers: req.params.id },
+      },
+      {
+        new: true,
+        upsert: true,
+      },
+      (err, docs) => {
+        if (!err) {
+          //res.status(201).json(docs);
+        } else return res.status(400).json(err);
+      }
+    );
+  } catch (err) {
+    //return res.status(500).json({ message: err });
   }
 };

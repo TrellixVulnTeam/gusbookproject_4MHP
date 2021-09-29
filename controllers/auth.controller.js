@@ -2,7 +2,7 @@ const userModel = require("../models/user.model");
 
 module.exports.signup = async (req, res) => {
   console.log(req.body);
-  const { pseudo, email, password } = req.body;
+  const { pseudo, email, password } = req.body; // destructuring
 
   try {
     const user = await userModel.create({ pseudo, email, password });
