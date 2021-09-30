@@ -30,4 +30,15 @@ const signInErrors = (err) => {
   return errors;
 };
 
-module.exports = { signUpErrors, signInErrors };
+const uploadErrors = (err) => {
+  let errors = { format: "", maxSize: "" };
+
+  if (err.message.includes("format invalide"))
+    errors.format = "Format incompatible";
+
+  if (err.message.includes("fichier trop volumineux"))
+    errors.maxSize = "fichier dépasse 500ko";
+  return errors;
+};
+
+module.exports = { signUpErrors, signInErrors, uploadErrors };
