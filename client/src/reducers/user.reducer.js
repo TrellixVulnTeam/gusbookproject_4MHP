@@ -1,5 +1,12 @@
+import { GET_USER } from "../actions/user.actions";
+
 const initialState = {};
 
 export default function userReducer(state = initialState, action) {
-  return initialState;
+  switch (action.type) {
+    case GET_USER:
+      return action.playload;
+    default:
+      return state;
+  }
 }

@@ -1,10 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Routes from "./components/routes";
 import UidContext from "./components/AppContext";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { getUser } from "./actions/user.actions";
 
 const App = () => {
   const [uid, setUid = useState] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -19,6 +23,8 @@ const App = () => {
         .catch((err) => console.log("No token "));
     };
     fetchToken();
+
+    if (uid) dispatch(getUser(uid));
   }, [uid]);
 
   return (

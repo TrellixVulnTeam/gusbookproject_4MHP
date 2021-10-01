@@ -2,9 +2,16 @@ import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import Logout from "./Log/Logout";
 import UidContext from "./AppContext";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const uid = useContext(UidContext);
+  const userData = useSelector((state) => state.userReducer);
+
+  const capitalize = (str) =>
+    str ? str.charAt(0).toUpperCase() + str.slice(1) : null;
+
+  console.log(userData);
   return (
     <nav>
       <div className="nav-container">
@@ -21,7 +28,7 @@ const Navbar = () => {
             <li></li>
             <li className="welcome">
               <NavLink exact to="/profil">
-                <h5>Bienvenue 'valeur dynamique</h5>
+                <h5>Bienvenue {capitalize(userData.pseudo)}</h5>
               </NavLink>
             </li>
             {<Logout />}
