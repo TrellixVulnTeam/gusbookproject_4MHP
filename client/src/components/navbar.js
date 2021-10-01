@@ -3,13 +3,11 @@ import { NavLink } from "react-router-dom";
 import Logout from "./Log/Logout";
 import UidContext from "./AppContext";
 import { useSelector } from "react-redux";
+import { capitalize } from "../Util/functions";
 
 const Navbar = () => {
   const uid = useContext(UidContext);
   const userData = useSelector((state) => state.userReducer);
-
-  const capitalize = (str) =>
-    str ? str.charAt(0).toUpperCase() + str.slice(1) : null;
 
   console.log(userData);
   return (
