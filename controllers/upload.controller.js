@@ -6,8 +6,6 @@ const { uploadErrors } = require("../utils/errors.utils");
 const pipeline = promisify(require("stream").pipeline);
 
 module.exports.uploadProfil = async (req, res) => {
-  console.log("req " + req);
-  console.log("req.file " + req.file);
   try {
     if (
       req.file.detectedMimeType !== "image/jpg" &&
@@ -33,4 +31,20 @@ module.exports.uploadProfil = async (req, res) => {
       `${__dirname}/../client/public/uploads/profil/${filename}`
     )
   );
+
+  try {
+    await userModel.findByIdAndUpdate(
+      req.body.userId,
+      {
+        $set: { image: "./uploads/profil/" + filename },
+      },
+      { new: true },
+      (err, docs) => {
+        if (!err) return res.send(docs);
+        else return res.status(500).send({ message: err });
+      }
+    );
+  } catch (error) {
+    //return res.status(500).send({ message: error });
+  }
 };
