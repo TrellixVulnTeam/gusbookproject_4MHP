@@ -37,7 +37,7 @@ module.exports.updateUser = async (req, res) => {
       },
       {
         $set: {
-          description: req.body.description,
+          bio: req.body.bio,
         },
       },
       {

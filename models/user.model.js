@@ -26,11 +26,11 @@ const userSchema = new mongoose.Schema(
       maxLength: 1024,
       minLength: 6,
     },
-    image: {
+    picture: {
       type: String,
       default: "./uploads/profil/random-user.png ",
     },
-    description: {
+    bio: {
       type: String,
       maxLength: 1024,
     },
