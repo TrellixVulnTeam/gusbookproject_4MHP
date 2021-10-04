@@ -9,14 +9,14 @@ import { getUsers } from "./actions/users.action";
 
 //dev tools
 import { composeWithDevTools } from "redux-devtools-extension";
-import logger from "redux-logger";
+//import logger from "redux-logger";
 
 //style
 import "./styles/index.scss";
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk, logger))
+  composeWithDevTools(applyMiddleware(thunk))
 );
 
 store.dispatch(getUsers());

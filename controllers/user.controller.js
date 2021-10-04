@@ -119,7 +119,6 @@ module.exports.follow = async (req, res) => {
       (err, docs) => {
         if (!err) {
           // res.status(201).json(docs);
-          console.log("query two OK");
         } else return res.status(400).json(err);
       }
     );

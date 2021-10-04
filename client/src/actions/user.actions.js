@@ -3,6 +3,8 @@ import axios from "axios";
 export const GET_USER = "GET_USER";
 export const UPLOAD_PICTURE = "UPLOAD_PICTURE";
 export const UPDATE_BIO = "UPDATE_BIO";
+export const FOLLOW_USER = "FOLLOW_USER";
+export const UNFOLLOW_USER = "UNFOLLOW_USER";
 
 export const getUser = (uid) => {
   return (dispatch) => {
@@ -43,6 +45,45 @@ export const updateBio = (userId, bio) => {
         dispatch({
           type: UPDATE_BIO,
           playload: bio,
+        });
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+export const followUser = (followerId, idToFollow) => {
+  return (dispatch) => {
+    return axios({
+      method: "PATCH",
+      url: `${process.env.REACT_APP_API_URL}api/user/follow/` + followerId,
+      data: { idToFollow },
+    })
+      .then((res) => {
+        console.log("coucou follow");
+        dispatch({
+          type: "FOLLOW_USER",
+          playload: { idToFollow },
+        });
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
+export const unFollowUser = (followerId, idToUnfollow) => {
+  console.log("idtounfollow:  ", idToUnfollow);
+  console.log("followerId : ", followerId);
+  return (dispatch) => {
+    console.log("coucou unfollow");
+    return axios({
+      method: "PATCH",
+      url: `${process.env.REACT_APP_API_URL}api/user/unfollow/` + followerId,
+      data: { idToUnfollow },
+    })
+      .then((res) => {
+        console.log("then unfollo");
+        dispatch({
+          type: "UNFOLLOW_USER",
+          playload: { idToUnfollow },
         });
       })
       .catch((error) => console.log(error));
