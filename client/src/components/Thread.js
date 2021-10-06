@@ -29,14 +29,14 @@ const Thread = () => {
 
     window.addEventListener("scroll", loadMore);
     return () => window.removeEventListener("scroll", loadMore);
-  }, [loadPost, dispatch]);
+  }, [loadPost, dispatch, count]);
 
   return (
     <div className="thread-container">
       <ul>
         {!isEmpty(posts[0]) &&
-          posts.map((post) => {
-            return <Card post={post} key={post.id} />;
+          posts.map((post, i) => {
+            return <Card key={i} post={post} />;
           })}
       </ul>
     </div>

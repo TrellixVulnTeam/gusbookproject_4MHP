@@ -18,6 +18,21 @@ export function dateParser(date) {
   return result.toString();
 }
 
+export function timestampParser(tmstp) {
+  let options = {
+    hour: "2-digit",
+    minute: "2-digit",
+
+    weekday: "long",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  let date = new Date(tmstp).toLocaleDateString("fr-FR", options);
+
+  return date.toString();
+}
+
 export function isEmpty(value) {
   return (
     value === undefined ||
