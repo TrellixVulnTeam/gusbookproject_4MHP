@@ -16,6 +16,10 @@ export const ADD_COMMENT = "ADD_COMMENT";
 export const EDIT_COMMENT = "EDIT_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 
+//errors
+
+export const GET_POST_ERRORS = "GET_POST_ERRORS";
+
 export const getPosts = (num) => {
   return (dispatch) => {
     return axios({
@@ -24,7 +28,6 @@ export const getPosts = (num) => {
     })
       .then((res) => {
         const array = res.data.slice(0, num);
-
         dispatch({ type: GET_POSTS, playload: array });
       })
       .catch((error) => {
@@ -35,11 +38,19 @@ export const getPosts = (num) => {
 
 export const addPost = (data) => {
   return (dispatch) => {
+    console.log("addpost action");
     //return axios.post(`${process.env.REACT_APP_API_URL}api/post/`, data);
     return axios({
       method: "POST",
       url: `${process.env.REACT_APP_API_URL}api/post/`,
       data: data,
+    }).then((res) => {
+      console.log(res.data);
+      if (res.data) {
+        dispatch({ type: GET_POST_ERRORS, playload: res.data });
+      } else {
+        dispatch({ type: GET_POST_ERRORS, playload: "" });
+      }
     });
   };
 };
