@@ -29,7 +29,7 @@ const UpdateProfil = () => {
       <h1>Profil de {capitalize(userData.pseudo)}</h1>
       <div className="update-container">
         <div className="left-part">
-          <h3>Photo de profil</h3>
+          <h3>Photo</h3>
           <img src={userData.picture} alt="profilImage" />
           <UploadImg />
           <p>{error.maxSize}</p>
